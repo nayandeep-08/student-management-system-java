@@ -62,7 +62,7 @@ Password: 1234
 - Spring Boot REST API
 ## Output
 
-![Output](screenshots/output.png)
+![Output](src/screenshots/output.png)
 ## Author
 
 Nayan Deep Joshi
