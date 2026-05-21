@@ -63,7 +63,6 @@ Password: 1234
 ## Output
 
 ![Output](Screenshot/output.png)
-
 ## Author
 
 Nayan Deep Joshi
