@@ -60,6 +60,9 @@ Password: 1234
 - PostgreSQL Database
 - GUI using Swing
 - Spring Boot REST API
+## Output
+
+![Output](screenshots/output.png)
 
 ## Author
 
