@@ -2,26 +2,25 @@ package util;
 
 import model.Student;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-
+import java.io.*;
 import java.util.ArrayList;
 
 public class FileHandler {
 
-    private static final String FILE_PATH =
-            "src/data/students.txt";
-
+    // data folder ke andar file save hogi
+    private static final String FILE_PATH = "data/students.txt";
     // SAVE STUDENTS
     public static void saveStudents(ArrayList<Student> students) {
 
         try {
 
+            File file = new File(FILE_PATH);
+
+            // agar data folder nahi ho to create ho jaye
+            file.getParentFile().mkdirs();
+
             BufferedWriter writer =
-                    new BufferedWriter(new FileWriter(FILE_PATH));
+                    new BufferedWriter(new FileWriter(file));
 
             for (Student s : students) {
 
@@ -30,7 +29,7 @@ public class FileHandler {
                                 s.getName() + "," +
                                 s.getAge() + "," +
                                 s.getCourse() + "," +
-                                s.getMarks() +","+
+                                s.getMarks() + "," +
                                 s.getTotalClasses() + "," +
                                 s.getAttendedClasses()
                 );
@@ -42,9 +41,10 @@ public class FileHandler {
 
             System.out.println("Data Saved Successfully!");
 
-        } catch (IOException e) {
+        } catch (Exception e) {
 
             System.out.println("Error Saving Data!");
+            e.printStackTrace();
         }
     }
 
@@ -53,15 +53,26 @@ public class FileHandler {
 
         ArrayList<Student> students = new ArrayList<>();
 
-
         try {
 
+            File file = new File(FILE_PATH);
+
+            // file nahi hai to empty list return
+            if (!file.exists()) {
+                file.createNewFile();
+                return students;
+            }
+
             BufferedReader reader =
-                    new BufferedReader(new FileReader(FILE_PATH));
+                    new BufferedReader(new FileReader(file));
 
             String line;
 
             while ((line = reader.readLine()) != null) {
+
+                if (line.trim().isEmpty()) {
+                    continue;
+                }
 
                 String[] data = line.split(",");
 
@@ -73,17 +84,25 @@ public class FileHandler {
                 int totalClasses = Integer.parseInt(data[5]);
                 int attendedClasses = Integer.parseInt(data[6]);
 
-                Student student =
-                        new Student(age,id,name, course, marks,totalClasses,attendedClasses);
+                Student student = new Student(
+                        age,
+                        id,
+                        name,
+                        course,
+                        marks,
+                        totalClasses,
+                        attendedClasses
+                );
 
                 students.add(student);
             }
 
             reader.close();
 
-        } catch (IOException e) {
+        } catch (Exception e) {
 
             System.out.println("Error Loading Data!");
+            e.printStackTrace();
         }
 
         return students;

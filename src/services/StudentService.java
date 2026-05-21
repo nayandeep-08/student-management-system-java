@@ -2,20 +2,24 @@ package services;
 
 import model.Student;
 import util.FileHandler;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import java.util.ArrayList;
-
 public class StudentService {
 
     ArrayList<Student> students = FileHandler.loadStudents();
+
     // Add Student
     public void addStudent(Student student) {
 
         students.add(student);
+
+        // add karte hi save ho jayega
+        FileHandler.saveStudents(students);
 
         System.out.println("Student Added Successfully!");
     }
@@ -24,28 +28,41 @@ public class StudentService {
     public void viewStudents() {
 
         if (students.isEmpty()) {
+
             System.out.println("No Students Found!");
             return;
         }
 
         for (Student s : students) {
+
             System.out.println(s);
         }
     }
-    public void searchstudent(int id){
+
+    // Search Student
+    public void searchstudent(int id) {
+
         boolean found = false;
-        for (Student s: students){
-            if (s.getId()==id){
-                System.out.println("student found");
+
+        for (Student s : students) {
+
+            if (s.getId() == id) {
+
+                System.out.println("Student Found:");
                 System.out.println(s);
-                found=true;
+
+                found = true;
                 break;
             }
         }
-        if(!found){
-            System.out.println("student not found");
+
+        if (!found) {
+
+            System.out.println("Student Not Found!");
         }
     }
+
+    // Update Student
     public void updateStudent(int id, String name, int age,
                               String course, double marks) {
 
@@ -60,6 +77,8 @@ public class StudentService {
                 s.setCourse(course);
                 s.setMarks(marks);
 
+                FileHandler.saveStudents(students);
+
                 System.out.println("Student Updated Successfully!");
 
                 found = true;
@@ -68,34 +87,46 @@ public class StudentService {
         }
 
         if (!found) {
+
             System.out.println("Student Not Found!");
         }
     }
+
+    // Delete Student
     public void deleteStudent(int id) {
 
-        boolean found = false;
+        Student studentToRemove = null;
 
         for (Student s : students) {
 
             if (s.getId() == id) {
 
-                students.remove(s);
-
-                System.out.println("Student Deleted Successfully!");
-
-                found = true;
-
+                studentToRemove = s;
                 break;
             }
         }
 
-        if (!found) {
+        if (studentToRemove != null) {
+
+            students.remove(studentToRemove);
+
+            FileHandler.saveStudents(students);
+
+            System.out.println("Student Deleted Successfully!");
+
+        } else {
+
             System.out.println("Student Not Found!");
         }
     }
+
+    // Get Students
     public ArrayList<Student> getStudents() {
+
         return students;
     }
+
+    // Sort By Name
     public void sortByName() {
 
         Collections.sort(students, new Comparator<Student>() {
@@ -107,10 +138,14 @@ public class StudentService {
             }
         });
 
+        FileHandler.saveStudents(students);
+
         System.out.println("Students Sorted By Name!");
 
         viewStudents();
     }
+
+    // Sort By Marks
     public void sortByMarks() {
 
         Collections.sort(students, new Comparator<Student>() {
@@ -122,19 +157,35 @@ public class StudentService {
             }
         });
 
+        FileHandler.saveStudents(students);
+
         System.out.println("Students Sorted By Marks!");
 
         viewStudents();
     }
+
+    // Check ID Exists
     public boolean isIdExists(int id) {
+
         for (Student s : students) {
+
             if (s.getId() == id) {
+
                 return true;
             }
         }
+
         return false;
     }
+
+    // Show Topper
     public void showTopper() {
+
+        if (students.isEmpty()) {
+
+            System.out.println("No Students Found!");
+            return;
+        }
 
         Student topper = students.stream()
 
@@ -150,18 +201,25 @@ public class StudentService {
             System.out.println(topper);
         }
     }
+
+    // Show Passed Students
     public void showPassedStudents() {
 
         List<Student> passedStudents = students.stream()
+
                 .filter(s -> s.getMarks() >= 60)
+
                 .collect(Collectors.toList());
+
         if (passedStudents.isEmpty()) {
+
             System.out.println("No Passed Students!");
             return;
         }
+
         for (Student s : passedStudents) {
+
             System.out.println(s);
         }
     }
-
 }
