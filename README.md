@@ -27,15 +27,6 @@ A console-based Student Management System built using Core Java.
 - Stream API
 - Lambda Expressions
 
-## Project Structure
-
-src/
-│
-├── model/
-├── services/
-├── util/
-├── data/
-
 ## Concepts Covered
 
 - OOP Concepts
